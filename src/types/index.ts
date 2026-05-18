@@ -16,10 +16,12 @@ export interface WorkoutExercise {
 
 export interface Workout {
     id: string
+    date: string
     name: string
-    muscleGroup: MuscleGroup
-    equipment: Equipment
-    description?: string
+    exercises: WorkoutExercise[]
+    duration?: number
+    notes?: string
+    completed: boolean
 }
 
 export interface Exercise {

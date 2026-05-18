@@ -3,9 +3,9 @@ import type { Workout, Exercise } from "../types";
 
 class GymDatabase extends Dexie {
 
-    workout!: Table<Workout>
+    workouts!: Table<Workout>
 
-    exercise!: Table<Exercise>
+    exercises!: Table<Exercise>
 
     constructor() {
         super('GymTrackerDB');
