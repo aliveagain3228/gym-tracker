@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, HashRouter} from 'react-router-dom'
 import WorkoutPage from './pages/WorkoutPage'
 import HistoryPage from './pages/HistoryPage'
 import HomePage from './pages/HomePage'
 
 export default function App() {
     return (
-        <BrowserRouter>
+        <HashRouter>
             <div className="min-h-screen bg-slate-950 text-white">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
@@ -14,6 +14,6 @@ export default function App() {
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </div>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
