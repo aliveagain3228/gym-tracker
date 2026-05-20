@@ -140,7 +140,7 @@ export function useWorkouts() {
         }))
     }
 
-    const comlpleteWorkout = async (workoutId: string, duration: number) => {
+    const completeWorkout = async (workoutId: string, duration: number) => {
         await db.workouts
             .where('id').equals(workoutId)
             .modify(w => {
@@ -166,7 +166,7 @@ export function useWorkouts() {
         addSet,
         toggleSet,
         updateSet,
-        comlpleteWorkout,
+        completeWorkout,
         deleteWorkout,
     }
 }

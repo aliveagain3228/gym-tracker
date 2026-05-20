@@ -14,6 +14,18 @@ export interface WorkoutExercise {
     notes?: string
 }
 
+export interface WorkoutTemplate {
+    id: string
+    name: string
+    exercises: {
+        exerciseId: string
+        exerciseName: string
+        defaultSets: number
+        defaultWeight: number
+        defaultReps: number
+    }[]
+}
+
 export interface Workout {
     id: string
     date: string
