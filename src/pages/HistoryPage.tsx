@@ -9,6 +9,7 @@ import { useWorkouts } from "../hooks/useWorkouts.ts";
 import { useExercises } from "../hooks/useExercises.ts";
 import {calculate1RM, calculateVolume, getBestSet} from "../utils/calculations.ts";
 import type { Workout } from "../types";
+import { ArrowLeft, Dumbbell, RotateCcw, Scale, BarChart3 } from "lucide-react";
 
 export default function HistoryPage() {
     const navigate = useNavigate()
@@ -60,30 +61,37 @@ export default function HistoryPage() {
                     onClick={() => navigate('/')}
                     className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-slate-400"
                 >
-                    ←
+                    <ArrowLeft size={20} />
                 </button>
                 <h1 className="text-xl font-bold text-white">История тренировок</h1>
             </div>
 
             <div className="grid grid-cols-3 gap-3 mb-6">
                 {[
-                    { label: 'Тренировок', value: completedWorkouts.length, icon: '🏋️'},
-                    { label: 'Подходов', value: totalSets, icon: '🔁'},
-                    { label: 'Тоннаж (кг)', value: totalVolume.toLocaleString('ru-RU'), icon: '⚖️'},
-                ].map(stat => (
-                    <div
-                        key={stat.label}
-                        className="bg-slate-900 rounded-2xl p-4 text-center"
-                    >
-                        <div className="text-2xl mb-1">{stat.icon}</div>
-                        <p className="text-white font-bold text-xl">{stat.value}</p>
-                        <p className="text-slate-500 text-xs mt-0.5">{stat.label}</p>
-                    </div>
-                ))}
+                    { label: 'Тренировок', value: completedWorkouts.length, icon: Dumbbell, color: 'text-indigo-400'},
+                    { label: 'Подходов', value: totalSets, icon: RotateCcw, color: 'text-green-400'},
+                    { label: 'Тоннаж (кг)', value: totalVolume.toLocaleString('ru-RU'), icon: Scale, color: 'text-purple-400'},
+                ].map(stat => {
+                    const IconComponent = stat.icon
+                    return (
+                        <div
+                            key={stat.label}
+                            className="bg-slate-900 rounded-2xl p-4 text-center"
+                        >
+                            <IconComponent size={28} className={`mx-auto mb-2 ${stat.color}`}/>
+                            <p className="text-white font-bold text-xl">{stat.value}</p>
+                            <p className="text-slate-500 text-xs mt-0.5">{stat.label}</p>
+                        </div>
+                    )
+                })}
             </div>
 
             <div className="bg-slate-900 rounded-2xl p-4 mb-6">
-                <h2 className="font-semibold text-white mb-3">Прогрессия</h2>
+                <div className="flex items-center gap-2 mb-3">
+                    <BarChart3 size={18} className="text-indigo-400" />
+                    <h2 className="font-semibold text-white mb-3">Прогрессия</h2>
+                </div>
+
 
                 <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
                     {exercisesInHistory.length === 0 ? (
@@ -127,7 +135,7 @@ export default function HistoryPage() {
                                     />
                                 <Tooltip
                                     content={({ active, payload }) => {
-                                        if(!active || payload?.length) return null
+                                        if(!active || !payload?.length) return null
                                         const d = payload[0].payload
                                         return (
                                             <div className="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs">
@@ -182,7 +190,7 @@ export default function HistoryPage() {
             <div className="flex flex-col gap-3">
                 {completedWorkouts.length === 0 ? (
                     <div className="text-center py-12 text-slate-500">
-                        <div className="text-3xl mb-2">📊</div>
+                        <BarChart3 size={48} className="mx-auto mb-3 text-slate-600" />
                         <p className="text-sm">Завершите первую тренировку чтобы увидеть историюю</p>
                     </div>
                 ) : (

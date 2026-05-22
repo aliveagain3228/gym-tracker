@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from '../db'
 import type { WorkoutTemplate, Workout } from "../types";
-import * as worker_threads from "node:worker_threads";
-
 
 export function useTemplates() {
     const [templates, setTemplates] = useState<WorkoutTemplate[]>([])

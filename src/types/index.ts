@@ -42,6 +42,8 @@ export interface Exercise {
     muscleGroup: MuscleGroup
     equipment: Equipment
     description?: string
+    previewImage?: string
+    tutorialGif?: string
 }
 
 export type MuscleGroup =
@@ -62,22 +64,22 @@ export type Equipment =
 | 'bodyweight'
 | 'other'
 
-export const MUSCLE_GROUP_CONFIG: Record<MuscleGroup, { label: string, emoji: string}> = {
-    chest: { label: 'Chest', emoji: '💪'},
-    back: { label: 'Back', emoji: '🔙'},
-    shoulders: { label: 'Shoulders', emoji: '🏋️'},
-    biceps: { label: 'Biceps', emoji: '💪'},
-    triceps: { label: 'Triceps', emoji: '💪'},
-    legs: { label: 'Legs', emoji: '🦵'},
-    core: { label: 'Core', emoji: '🎯'},
-    fullBody: { label: 'Full Body', emoji: '⚡'},
+export const MUSCLE_GROUP_CONFIG: Record<MuscleGroup, { label: string, icon: string}> = {
+    chest: { label: 'Грудь', icon: 'Dumbbell'},
+    back: { label: 'Back', icon: 'ArrowLeft'},
+    shoulders: { label: 'Плечи', icon: 'Activity'},
+    biceps: { label: 'Бицепс', icon: 'Flame'},
+    triceps: { label: 'Трицепс', icon: 'Flame'},
+    legs: { label: 'Ноги', icon: 'User'},
+    core: { label: 'Пресс', icon: 'Target'},
+    fullBody: { label: 'Всё тело', icon: 'Zap'},
 }
 
-export const EQUIPMENT_CONFIG: Record<Equipment, { label: string, emoji: string}> = {
-    barbell: { label: 'Barbell', emoji: '🏋️'},
-    dumbbell: { label: 'Dumbbell', emoji: '🔵'},
-    machine: { label: 'Machine', emoji: '⚙️'},
-    cable: { label: 'Cable', emoji: '〰️'},
-    bodyweight: { label: 'Bodyweight', emoji: '🤸'},
-    other: { label: 'Other', emoji: '📦'},
+export const EQUIPMENT_CONFIG: Record<Equipment, { label: string, icon: string}> = {
+    barbell: { label: 'Штанга', icon: 'Dumbbell'},
+    dumbbell: { label: 'Гантели', icon: 'Dumbbell'},
+    machine: { label: 'Тренажёр', icon: 'Activity'},
+    cable: { label: 'Блоки', icon: 'Wind'},
+    bodyweight: { label: 'Свой вес', icon: 'User'},
+    other: { label: 'Другое', icon: 'Target'},
 }

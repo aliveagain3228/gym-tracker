@@ -4,7 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWorkouts } from "../hooks/useWorkouts.ts";
 import WorkoutCard from "../components/WorkoutCard/WorkoutCard.tsx";
 import { useTemplates } from "../hooks/useTemplates.ts";
-
+import {
+    Plus, History, Dumbbell,
+    Trash2, Play, X
+} from 'lucide-react'
 
 export default function HomePage() {
     const navigate = useNavigate()
@@ -24,8 +27,9 @@ export default function HomePage() {
 
     if(loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-slate-400 text-sm">Loading...</div>
+            <div className="flex items-center justify-center min-h-screen gap-3">
+                <Dumbbell className="text-indigo-500 animate-pulse" size={32} />
+                <div className="text-slate-400 text-sm">Загрузка...</div>
             </div>
         )
     }
@@ -50,18 +54,19 @@ export default function HomePage() {
 
             <button
                 onClick={() => navigate('/history')}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-slate-300 text-sm px-4"
+                className="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
             >
-                📊 История
+                <History size={18} className="text-slate-300" />
             </button>
             </div>
 
-            <button
+            <motion.button
                 onClick={() => setIsCreating(true)}
-                className="w-full py-4 rounded-2xl border-2 border-dashed border-slate-700 hover:border-indigo-500 hover:bg-indigo-500/5 transition-all text-slate-400 hover:text-indigo-400 font-medium text-sm mb-6"
+                whileTap={{ scale: 0.97 }}
+                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2 font-semibold text-white mb-6 shadow-lg shadow-indigo-500/20"
             >
-                + Начать тренировку
-            </button>
+                <Plus size={20} /> Начать тренировку
+            </motion.button>
 
             {templates.length > 0 && (
                 <section className="mb-6">
@@ -94,14 +99,14 @@ export default function HomePage() {
                                         }}
                                         className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition-colors"
                                     >
-                                        ▶ Старт
+                                        <Play size={12} /> Старт
                                     </button>
 
                                     <button
                                         onClick={() => deleteTemplate(template.id)}
                                         className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-600 hover:text-red-400 p-1.5"
                                     >
-                                        ✕
+                                        <Trash2 size={16} />
                                     </button>
                                 </div>
                             </div>
@@ -118,7 +123,7 @@ export default function HomePage() {
                         exit={{ opacity: 0, height: 0 }}
                         className="mb-6 overflow-hidden"
                     >
-                        <div className="bg-slate-900 rounded-2xl p-4 flex gap-3">
+                        <div className="bg-slate-900 rounded-2xl p-4 flex gap-3 border border-slate-800">
                             <input
                                 type="text"
                                 value={newName}
@@ -138,7 +143,7 @@ export default function HomePage() {
                                 onClick={() => { setIsCreating(false); setNewName('') }}
                                 className="bg-slate-800 hover:bg-slate-700 rounded-xl px-3 py-2.5 text-sm transition-colors text-slate-400"
                             >
-                                ✕
+                                <X size={16} />
                             </button>
                         </div>
                     </motion.div>

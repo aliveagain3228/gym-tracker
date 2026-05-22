@@ -1,8 +1,10 @@
 import { useState   } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useExercises } from "../../hooks/useExercises.ts";
 import type { MuscleGroup } from "../../types";
 import { MUSCLE_GROUP_CONFIG } from "../../types";
+import MuscleIcon from "../MuscleIcon/MuscleIcon.tsx";
+import { Search } from 'lucide-react'
 
 interface ExercisesPickerProps {
     onSelect: (exerciseId: string, exerciseName: string) => void
@@ -22,14 +24,6 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
     const muscleGroups = Object.keys(MUSCLE_GROUP_CONFIG) as MuscleGroup[]
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            onClick={e => e.stopPropagation()}
-            className="bg-slate-900 rounded-t-3xl w-full max-w-2xl max-h-[80vh] flex flex-col"
-        >
             <motion.div
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
@@ -38,19 +32,24 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
                 onClick={e => e.stopPropagation()}
                 className="bg-slate-900 rounded-t-3xl w-full max-w-2xl max-h-[80vh] flex flex-col"
             >
+
             <div className="flex justify-center pt-3 pb-2">
                 <div className="w-10 h-1 bg-slate-700 rounded-full" />
             </div>
 
             <div className="px-4 pb-4">
-                <input
-                    type="text"
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
-                    placeholder="Поиск упражнения..."
-                    autoFocus
-                    className="w-full bg-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 mb-3"
-                />
+                <div className="relative mb-3">
+                    <Search size={18} className="absolute left-3 top-1/2 translate-y-1/2 text-slate-500"/>
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={e => setQuery(e.target.value)}
+                        placeholder="Поиск упражнения..."
+                        autoFocus
+                        className="w-full bg-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 mb-3"
+                    />
+                </div>
+
 
                 <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
                     <button
@@ -73,7 +72,11 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
                                     : 'bg-slate-800 text-slate-400 hover:text-white'
                             }`}
                         >
-                            {MUSCLE_GROUP_CONFIG[group].emoji} {MUSCLE_GROUP_CONFIG[group].label}
+                            <MuscleIcon
+                                name={MUSCLE_GROUP_CONFIG[group].icon}
+                                size={14}
+                            />
+                            {MUSCLE_GROUP_CONFIG[group].label}
                         </button>
                     ))}
                 </div>
@@ -89,20 +92,40 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
                              onClick={() => onSelect(exercise.id, exercise.name)}
                              className="flex items-center gap-3 p-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
                         >
-                            <span className="text-xl">
-                                {MUSCLE_GROUP_CONFIG[exercise.muscleGroup].emoji}
-                            </span>
-                            <div>
+                            <div
+                                className="w-12 h-12 rounded-lg bg-slate-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                {exercise.previewImage ? (
+                                    <img
+                                        src={exercise.previewImage}
+                                        alt={exercise.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <MuscleIcon
+                                        name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
+                                        size={24}
+                                        className="text-slate-400 group-hover:text-slate-400 transition-colors"
+                                    />
+                                )}
+                            </div>
+
+                            <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-white">{exercise.name}</p>
                                 <p className="text-xs text-slate-500">
                                     {MUSCLE_GROUP_CONFIG[exercise.muscleGroup].label}
                                 </p>
                             </div>
+
+                            {exercise.tutorialGif && (
+                                <div
+                                    className="text-xs text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-md flex-shrink-0">
+                                    GIF
+                                </div>
+                            )}
                         </button>
                     ))
                 )}
             </div>
             </motion.div>
-        </motion.div>
     )
 }
