@@ -1,4 +1,5 @@
 import * as Icons from 'lucide-react'
+import React from 'react'
 
 interface MuscleIconProps {
     name: string

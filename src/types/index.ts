@@ -46,27 +46,16 @@ export interface Exercise {
     tutorialGif?: string
 }
 
-export type MuscleGroup =
-    | 'chest'
-| 'back'
-| 'shoulders'
-| 'biceps'
-| 'triceps'
-| 'legs'
-| 'core'
-| 'fullBody'
+export const MUSCLE_GROUPS = ['chest', 'back', 'shoulders', 'biceps', 'triceps', 'legs', 'core', 'fullBody'] as const
+export type MuscleGroup = typeof MUSCLE_GROUPS[number]
 
-export type Equipment =
-    | 'barbell'
-| 'dumbbell'
-| 'machine'
-| 'cable'
-| 'bodyweight'
-| 'other'
+export const EQUIPMENTS = ['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight', 'other'] as const
+export type Equipment = typeof EQUIPMENTS[number]
+
 
 export const MUSCLE_GROUP_CONFIG: Record<MuscleGroup, { label: string, icon: string}> = {
     chest: { label: 'Грудь', icon: 'Dumbbell'},
-    back: { label: 'Back', icon: 'ArrowLeft'},
+    back: { label: 'Спина', icon: 'ArrowLeft'},
     shoulders: { label: 'Плечи', icon: 'Activity'},
     biceps: { label: 'Бицепс', icon: 'Flame'},
     triceps: { label: 'Трицепс', icon: 'Flame'},

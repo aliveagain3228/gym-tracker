@@ -147,10 +147,18 @@ export default function WorkoutPage() {
 
             <AnimatePresence>
                 {showPicker && (
-                    <ExercisePicker
-                        onSelect={handleAddExercise}
-                        onClose={() => setShowPicker(false)}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowPicker(false)}
+                        className="fixed inset-0 z-30 flex items-end bg-black/50 backdrop-blur-sm"
+                    >
+                        <ExercisePicker
+                            onSelect={handleAddExercise}
+                            onClose={() => setShowPicker(false)}
                         />
+                    </motion.div>
                 )}
             </AnimatePresence>
         </div>

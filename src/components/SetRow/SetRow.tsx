@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from 'framer-motion'
 import type { Set } from "../../types"
-import { calculate1RM, formatWeight } from "../../utils/calculations.ts";
+import { calculate1RM } from "../../utils/calculations.ts";
 
 interface  SetRowProps{
     set: Set

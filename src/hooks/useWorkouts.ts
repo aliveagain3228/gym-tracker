@@ -8,19 +8,17 @@ export function useWorkouts() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const init = async () => {
+        void (async () => {
             await seedExerciseIfEmpty()
 
-            const all = await db.workouts
+        const all = await db.workouts
                 .orderBy('date')
                 .reverse()
                 .toArray()
 
             setWorkouts(all)
             setLoading(false)
-        }
-
-        init()
+        })()
     }, [])
 
     const createWorkout = async (name: string): Promise<Workout> => {

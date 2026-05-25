@@ -6,7 +6,7 @@ interface ExerciseDBExercise {
     bodyPart: string
     equipment: string
     target: string
-    gitUrl: string
+    gifUrl: string
     instructions: string[]
 }
 
@@ -54,7 +54,7 @@ function convertExercise(ex: ExerciseDBExercise): Exercise {
         BODY_PART_MAP[ex.bodyPart] ??
         'fullBody'
 
-    const equipment: Equipment = EQUIPMENT_MAP[ex.equipment] ?? 'other'
+    const equipment: Equipment = (EQUIPMENT_MAP[ex.equipment] ?? 'other') as Equipment
 
     const description = ex.instructions
         .map((step, i) => `${i + 1}.${step}`)
@@ -66,8 +66,8 @@ function convertExercise(ex: ExerciseDBExercise): Exercise {
         muscleGroup,
         equipment,
         description,
-        tutorialGif: ex.gitUrl,
-        previewImage:ex.gitUrl,
+        tutorialGif: ex.gifUrl,
+        previewImage:ex.gifUrl,
     }
 }
 
@@ -83,7 +83,8 @@ async function fetchBodyPart(bodyPart: string, limit = 50): Promise<ExerciseDBEx
     }
 
     const data = await response.json()
-    return data.exercise ?? data ?? []
+    const list = data.exercises ?? data
+    return Array.isArray(list) ? list : []
 }
 
 export async function fetchExercisesFromAPI(): Promise<Exercise[]> {
@@ -92,11 +93,11 @@ export async function fetchExercisesFromAPI(): Promise<Exercise[]> {
     const bodyPartsToFetch = [
         'chest', 'back', 'shoulders', 'upper arms', 'lower arms', 'upper legs', 'lower legs', 'waist',
     ]
-    const result = await Promise.all(
+    const results = await Promise.all(
         bodyPartsToFetch.map(part => fetchBodyPart(part))
     )
 
-    const allExercises = result.flat()
+    const allExercises = results.flat()
 
     const converted = allExercises.map(convertExercise)
     const unique = Array.from(

@@ -1,6 +1,6 @@
 import { useState   } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Info, X } from 'lucide-react'
+import { motion } from "framer-motion";
+import { Search, Info} from 'lucide-react'
 import { useExercises } from "../../hooks/useExercises.ts";
 import type { MuscleGroup, Exercise } from "../../types";
 import { MUSCLE_GROUP_CONFIG } from "../../types";
@@ -12,9 +12,9 @@ interface ExercisesPickerProps {
     onClose: () => void
 }
 
-export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerProps) {
+export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
 
-    const { exercises, searchExercises } = useExercises()
+    const { searchExercises } = useExercises()
     const [query, setQuery] = useState('')
     const [activeGroup, setActiveGroup] = useState<MuscleGroup | null>(null)
 
@@ -70,7 +70,7 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
                         <button
                             key={group}
                             onClick={() => setActiveGroup(prev => prev === group ? null : group)}
-                            className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full transition-colors whitespace-nowrap ${
+                            className={`flex items-center gap-1.5 flex-shrink-0 text-xs px-3 py-1.5 rounded-full transition-colors whitespace-nowrap ${
                                 activeGroup === group
                                 ? 'bg-indigo-600 text-white'
                                     : 'bg-slate-800 text-slate-400 hover:text-white'
