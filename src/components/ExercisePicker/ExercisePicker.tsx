@@ -1,10 +1,11 @@
 import { useState   } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Info, X } from 'lucide-react'
 import { useExercises } from "../../hooks/useExercises.ts";
-import type { MuscleGroup } from "../../types";
+import type { MuscleGroup, Exercise } from "../../types";
 import { MUSCLE_GROUP_CONFIG } from "../../types";
 import MuscleIcon from "../MuscleIcon/MuscleIcon.tsx";
-import { Search } from 'lucide-react'
+import ExerciseTutorialModal from "../ExerciseTutorialModal/ExerciseTutorialModal.tsx";
 
 interface ExercisesPickerProps {
     onSelect: (exerciseId: string, exerciseName: string) => void
@@ -17,6 +18,8 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
     const [query, setQuery] = useState('')
     const [activeGroup, setActiveGroup] = useState<MuscleGroup | null>(null)
 
+    const [tutorialExercise, setTutorialExercise] = useState<Exercise | null>(null)
+
     const filtered = searchExercises(query).filter(e =>
     activeGroup ? e.muscleGroup === activeGroup : true
     )
@@ -24,6 +27,7 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
     const muscleGroups = Object.keys(MUSCLE_GROUP_CONFIG) as MuscleGroup[]
 
     return (
+        <>
             <motion.div
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
@@ -87,45 +91,83 @@ export default function ExercisePicker({ onSelect, onClose }: ExercisesPickerPro
                     <p className="text-center text-slate-500 text-sm py-8">Ничего не найдено</p>
                 ) : (
                     filtered.map(exercise => (
-                        <button
-                             key={exercise.id}
-                             onClick={() => onSelect(exercise.id, exercise.name)}
-                             className="flex items-center gap-3 p-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                        <div
+                            key={exercise.id}
+                            className="flex items-center gap-3 p-2 rounded-xl bg-slate-800 hover:bg-slate-750 transition-colors"
                         >
-                            <div
-                                className="w-12 h-12 rounded-lg bg-slate-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            <button
+                                onClick={() => {
+                                    if (exercise.tutorialGif || exercise.description) {
+                                        setTutorialExercise(exercise)
+                                    }
+                                }}
+                                className="relative w-14 h-14 rounded-xl bg-slate-700 flex items-center justify-center flex-shrink-0 overflow-hidden group/preview"
+                            >
                                 {exercise.previewImage ? (
-                                    <img
-                                        src={exercise.previewImage}
-                                        alt={exercise.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
+                                    <>
+                                        <img
+                                            src={exercise.previewImage}
+                                            alt={exercise.name}
+                                            className="w-full h-full object-cover"
+                                            loading="lazy"
+                                            onError={e => {
+                                                const target = e.target as HTMLImageElement
+                                                target.style.display = 'none'
+                                                const fallback = target.nextElementSibling as HTMLElement
+                                                if (fallback) fallback.style.display = 'flex'
+                                            }}
+                                        />
+                                        <div
+                                            className="absolute inset-0 items-center justify-center hidden"
+                                        >
+                                            <MuscleIcon
+                                                name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
+                                                size={24}
+                                                className="text-slate-500"
+                                            />
+                                        </div>
+                                    </>
+                                ): (
                                     <MuscleIcon
                                         name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
                                         size={24}
-                                        className="text-slate-400 group-hover:text-slate-400 transition-colors"
+                                        className="text-slate-500"
                                     />
                                 )}
-                            </div>
+
+                                {(exercise.tutorialGif || exercise.description) && (
+                                    <div className="absolute inset-0 bg-black/60 items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-opacity flex">
+                                        <Info size={18} className="text-white" />
+                                    </div>
+                                )}
+                            </button>
 
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-white">{exercise.name}</p>
-                                <p className="text-xs text-slate-500">
+                                <p className="text-sm font-medium text-white leading-tight">
+                                    {exercise.name}
+                                </p>
+                                <p className="text-xs text-slate-500 mt-0.5">
                                     {MUSCLE_GROUP_CONFIG[exercise.muscleGroup].label}
                                 </p>
                             </div>
 
-                            {exercise.tutorialGif && (
-                                <div
-                                    className="text-xs text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-md flex-shrink-0">
-                                    GIF
-                                </div>
-                            )}
-                        </button>
-                    ))
-                )}
+                            <button
+                                onClick={() => onSelect(exercise.id, exercise.name)}
+                                className="flex-shrink-0 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg transition-colors font-medium"
+                            >
+                                + Добавить
+                            </button>
+                        </div>
+                        ))
+                    )}
             </div>
             </motion.div>
+
+            <ExerciseTutorialModal
+                exercise={tutorialExercise}
+                isOpen={tutorialExercise !== null}
+                onClose={() => setTutorialExercise(null)}
+                />
+        </>
     )
 }
