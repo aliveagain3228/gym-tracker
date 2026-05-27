@@ -2,6 +2,8 @@ import { db } from "./index.ts";
 import type { Exercise } from "../types";
 import { fetchExercisesFromAPI } from "./exerciseDbService.ts";
 
+const EXERCISES_LOADED_KEY = 'gym_tracker_api_loaded_v2'
+
 const FALLBACK_EXERCISES: Exercise[] = [
     { id: 'bench-press',        name: 'Жим штанги лёжа',              muscleGroup: 'chest',     equipment: 'barbell',    description: 'Базовое упражнение для груди. Опускай штангу к середине груди, локти 45°.' },
     { id: 'incline-db-press',   name: 'Жим гантелей на наклонной',    muscleGroup: 'chest',     equipment: 'dumbbell',   description: 'Верх грудных. Наклон скамьи 30–45°.' },
@@ -22,39 +24,37 @@ const FALLBACK_EXERCISES: Exercise[] = [
 ]
 
 export async function seedExerciseIfEmpty(): Promise<void> {
+    const alreadyLoaded = localStorage.getItem(EXERCISES_LOADED_KEY)
+
+    if (alreadyLoaded === 'true') return
+
     const count = await db.exercises.count()
 
-    if(count > 0) return
-    console.log('📦 База упражнений пуста. Начинаю инициализацию...')
+    if (count > 0) {
+        console.log('🔄 Обновляю упражнения до новой версии...')
+        await db.exercises.clear()
+    } else {
+        console.log('📦 База пуста. Загружаю упражнения...')
+    }
 
     try {
         const exercises = await fetchExercisesFromAPI()
 
-        if(exercises.length > 0) {
-            await db.exercises.bulkAdd(exercises)
-            console.log(`✅ Загружено из API: ${exercises.length} упражнений`)
+        if (exercises.length > 0) {
+            await db.exercises.bulkPut(exercises)
+            localStorage.setItem(EXERCISES_LOADED_KEY, 'true')
+            console.log(`✅ Загружено ${exercises.length} упражнений`)
             return
         }
     } catch (error) {
-        console.warn('⚠️ API недоступен, загружаю локальные упражнения:', error)
+            console.warn('⚠️ Используем встроенный список упражнений:', error)
+        }
+        await db.exercises.bulkPut(FALLBACK_EXERCISES)
+        console.log(`✅ Загружено ${FALLBACK_EXERCISES.length} базовых упражнений`)
     }
 
-    await db.exercises.bulkAdd(FALLBACK_EXERCISES)
-    console.log(`✅ Загружено локально: ${FALLBACK_EXERCISES.length} упражнений`)
-}
-
-export async function refreshExercisesFromAPI(): Promise<void> {
-    console.log('🔄 Обновляю упражнения из API...')
-    await db.exercises
-        .filter(ex => ex.id.startsWith('edb_'))
-        .delete()
-
-    try {
-        const exercises = await fetchExercisesFromAPI()
-        await db.exercises.bulkAdd(exercises)
-        console.log(`✅ Обновлено: ${exercises.length} упражнений`)
-    } catch (error) {
-        console.error('❌ Ошибка обновления:', error)
-        throw error
+    export async function refreshExercisesFromAPI(): Promise<void> {
+        localStorage.removeItem(EXERCISES_LOADED_KEY)
+        await db.exercises.clear()
+        await seedExerciseIfEmpty()
     }
-}

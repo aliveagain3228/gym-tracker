@@ -8,7 +8,6 @@ import {
 import { useWorkouts } from "../hooks/useWorkouts.ts";
 import { useExercises } from "../hooks/useExercises.ts";
 import {calculate1RM, calculateVolume, getBestSet} from "../utils/calculations.ts";
-import type { Workout } from "../types";
 import { ArrowLeft, Dumbbell, RotateCcw, Scale, BarChart3 } from "lucide-react";
 
 export default function HistoryPage() {

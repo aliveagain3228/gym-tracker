@@ -43,7 +43,7 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
 
             <div className="px-4 pb-4">
                 <div className="relative mb-3">
-                    <Search size={18} className="absolute left-3 top-1/2 translate-y-1/2 text-slate-500"/>
+                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"/>
                     <input
                         type="text"
                         value={query}

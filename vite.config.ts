@@ -26,15 +26,26 @@ export default defineConfig(({ command }) => ({
               ]
           },
           workbox: {
-              globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+              globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
               runtimeCaching: [
                   {
                       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-                      handler: 'CacheFirst'
+                      handler: 'CacheFirst',
+                      options: { cacheName: 'google-fonts' }
                   }
               ]
           }
       })
   ],
+    server: {
+      proxy: {
+          '/api/exercises': {
+              target: 'https://exercisedb.dev',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/api\/exercises/, '/api/v1/exercises'),
+              secure: true,
+          }
+      }
+    },
     base: command === 'build' ? '/gym-tracker/' : '/',
 }))
