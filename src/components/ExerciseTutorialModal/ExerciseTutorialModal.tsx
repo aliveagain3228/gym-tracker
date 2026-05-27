@@ -3,6 +3,7 @@ import { X, Dumbbell } from 'lucide-react';
 import type { Exercise } from "../../types";
 import { MUSCLE_GROUP_CONFIG, EQUIPMENT_CONFIG } from "../../types";
 import MuscleIcon from "../MuscleIcon/MuscleIcon.tsx";
+import MuscleBodySvg from "../MuscleBodySvg/MuscleBodySvg.tsx";
 
 interface ExerciseTutorialModalProps {
     exercise: Exercise | null
@@ -40,41 +41,22 @@ export default function ExerciseTutorialModal({ exercise, isOpen, onClose, onAdd
                         className="fixed inset-x-4 top-[5%] max-w-md mx-auto bg-slate-900 rounded-3xl overflow-hidden z-50 shadow-2xl flex flex-col"
                     >
 
-                        <div className="relative bg-slate-800 flex-shrink-0" style={{ height: '45%' }}>
-                            {exercise.tutorialGif ? (
-                                <img
-                                    src={exercise.tutorialGif}
-                                    alt={`${exercise.name} техника`}
-                                    className="w-full h-full object-contain bg-white"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                                    <MuscleIcon
-                                        name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
-                                        size={64}
-                                        className="text-slate-600"
-                                        />
-                                    <p className="text-slate-600 text-sm">GIF недоступна</p>
-                                </div>
-                            )}
-
+                        <div className="relative bg-slate-800 flex items-center justify-center py-8">
+                            <MuscleBodySvg muscleGroup={exercise.muscleGroup} className="w-28 h-28" />
                             <button
                                 onClick={onClose}
-                                className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors"
+                                className="absolute top-3 right-3 w-9 h-9 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center transition-colors"
                             >
                                 <X size={18} className="text-white" />
                             </button>
                         </div>
 
-
-                        <div className="flex-1 overflow-y-auto p-5">
+                        <div className="p-5 overflow-y-auto max-h-[50vh]">
                             <h2 className="text-xl font-bold text-white mb-2">
                                 {exercise.name}
                             </h2>
 
-                            <div
-                                className="flex gap-2 flex-wrap mb-4"
-                            >
+                            <div className="flex gap-2 flex-wrap mb-4">
                                 <span className="flex items-center gap-1.5 text-xs bg-indigo-500/20 text-indigo-300 px-3 py-1.5 rounded-full">
                                     <MuscleIcon
                                         name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}

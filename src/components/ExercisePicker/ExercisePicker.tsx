@@ -6,10 +6,22 @@ import type { MuscleGroup, Exercise } from "../../types";
 import { MUSCLE_GROUP_CONFIG } from "../../types";
 import MuscleIcon from "../MuscleIcon/MuscleIcon.tsx";
 import ExerciseTutorialModal from "../ExerciseTutorialModal/ExerciseTutorialModal.tsx";
+import MuscleBodySvg from "../MuscleBodySvg/MuscleBodySvg.tsx";
 
 interface ExercisesPickerProps {
     onSelect: (exerciseId: string, exerciseName: string) => void
     onClose: () => void
+}
+
+const PREVIEW_BG: Record<MuscleGroup, string> = {
+    chest:    'from-red-500/30 to-red-900/20',
+    back:     'from-blue-500/30 to-blue-900/20',
+    shoulders:'from-orange-500/30 to-orange-900/20',
+    biceps:   'from-purple-500/30 to-purple-900/20',
+    triceps:  'from-violet-500/30 to-violet-900/20',
+    legs:     'from-green-500/30 to-green-900/20',
+    core:     'from-yellow-500/30 to-yellow-900/20',
+    fullBody: 'from-indigo-500/30 to-indigo-900/20',
 }
 
 export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
@@ -17,7 +29,6 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
     const { searchExercises } = useExercises()
     const [query, setQuery] = useState('')
     const [activeGroup, setActiveGroup] = useState<MuscleGroup | null>(null)
-
     const [tutorialExercise, setTutorialExercise] = useState<Exercise | null>(null)
 
     const filtered = searchExercises(query).filter(e =>
@@ -43,14 +54,14 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
 
             <div className="px-4 pb-4">
                 <div className="relative mb-3">
-                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"/>
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"/>
                     <input
                         type="text"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                         placeholder="Поиск упражнения..."
                         autoFocus
-                        className="w-full bg-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 mb-3"
+                        className="w-full bg-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                 </div>
 
@@ -95,52 +106,17 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
                             key={exercise.id}
                             className="flex items-center gap-3 p-2 rounded-xl bg-slate-800 hover:bg-slate-750 transition-colors"
                         >
-                            <button
-                                onClick={() => {
-                                    if (exercise.tutorialGif || exercise.description) {
-                                        setTutorialExercise(exercise)
-                                    }
-                                }}
-                                className="relative w-14 h-14 rounded-xl bg-slate-700 flex items-center justify-center flex-shrink-0 overflow-hidden group/preview"
+                            <div
+                                className={`w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden
+                                bg-gradient-to-br ${PREVIEW_BG[exercise.muscleGroup]}
+                                border border-white/5
+                                `}
                             >
-                                {exercise.previewImage ? (
-                                    <>
-                                        <img
-                                            src={exercise.previewImage}
-                                            alt={exercise.name}
-                                            className="w-full h-full object-cover"
-                                            loading="lazy"
-                                            onError={e => {
-                                                const target = e.target as HTMLImageElement
-                                                target.style.display = 'none'
-                                                const fallback = target.nextElementSibling as HTMLElement
-                                                if (fallback) fallback.style.display = 'flex'
-                                            }}
-                                        />
-                                        <div
-                                            className="absolute inset-0 items-center justify-center hidden"
-                                        >
-                                            <MuscleIcon
-                                                name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
-                                                size={24}
-                                                className="text-slate-500"
-                                            />
-                                        </div>
-                                    </>
-                                ): (
-                                    <MuscleIcon
-                                        name={MUSCLE_GROUP_CONFIG[exercise.muscleGroup].icon}
-                                        size={24}
-                                        className="text-slate-500"
+                                <MuscleBodySvg
+                                    muscleGroup={exercise.muscleGroup}
+                                    className="w-10 h-10"
                                     />
-                                )}
-
-                                {(exercise.tutorialGif || exercise.description) && (
-                                    <div className="absolute inset-0 bg-black/60 items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-opacity flex">
-                                        <Info size={18} className="text-white" />
-                                    </div>
-                                )}
-                            </button>
+                            </div>
 
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-white leading-tight">
@@ -151,12 +127,24 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
                                 </p>
                             </div>
 
-                            <button
-                                onClick={() => onSelect(exercise.id, exercise.name)}
-                                className="flex-shrink-0 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg transition-colors font-medium"
-                            >
-                                + Добавить
-                            </button>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                {exercise.description && (
+                                    <button
+                                        onClick={() => setTutorialExercise(exercise)}
+                                        className="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 flex items-center justify-center transition-colors"
+                                        title="Техника выполнения"
+                                    >
+                                        <Info size={16} className="text-slate-400 hover:text-white" />
+                                    </button>
+                                )}
+
+                                <button
+                                    onClick={() => onSelect(exercise.id, exercise.name)}
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg transition-colors font-medium"
+                                >
+                                    + Добавить
+                                </button>
+                            </div>
                         </div>
                         ))
                     )}

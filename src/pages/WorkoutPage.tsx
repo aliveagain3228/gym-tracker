@@ -73,7 +73,7 @@ export default function WorkoutPage() {
             <div className="flex items-center gap-3 mb-6">
                 <button
                     onClick={() => navigate('/')}
-                    className="p-2 rounded-xl bg-slate-500 hover:bg-slate-700 transition-colors text-slate-400"
+                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-slate-400"
                 >
                     ←
                 </button>

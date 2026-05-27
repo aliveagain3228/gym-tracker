@@ -42,8 +42,6 @@ export interface Exercise {
     muscleGroup: MuscleGroup
     equipment: Equipment
     description?: string
-    previewImage?: string
-    tutorialGif?: string
 }
 
 export const MUSCLE_GROUPS = ['chest', 'back', 'shoulders', 'biceps', 'triceps', 'legs', 'core', 'fullBody'] as const

@@ -2,7 +2,7 @@ import { db } from "./index.ts";
 import type { Exercise } from "../types";
 import { fetchExercisesFromAPI } from "./exerciseDbService.ts";
 
-const EXERCISES_LOADED_KEY = 'gym_tracker_api_loaded_v2'
+const EXERCISES_LOADED_KEY = 'gym_tracker_api_loaded_v3'
 
 const FALLBACK_EXERCISES: Exercise[] = [
     { id: 'bench-press',        name: 'Жим штанги лёжа',              muscleGroup: 'chest',     equipment: 'barbell',    description: 'Базовое упражнение для груди. Опускай штангу к середине груди, локти 45°.' },
@@ -24,17 +24,16 @@ const FALLBACK_EXERCISES: Exercise[] = [
 ]
 
 export async function seedExerciseIfEmpty(): Promise<void> {
-    const alreadyLoaded = localStorage.getItem(EXERCISES_LOADED_KEY)
 
-    if (alreadyLoaded === 'true') return
+    if (localStorage.getItem(EXERCISES_LOADED_KEY) === 'true') return
 
     const count = await db.exercises.count()
 
     if (count > 0) {
-        console.log('🔄 Обновляю упражнения до новой версии...')
+        console.log('🔄 Обновляю упражнения...')
         await db.exercises.clear()
     } else {
-        console.log('📦 База пуста. Загружаю упражнения...')
+        console.log('📦 Загружаю упражнения...')
     }
 
     try {
@@ -43,11 +42,11 @@ export async function seedExerciseIfEmpty(): Promise<void> {
         if (exercises.length > 0) {
             await db.exercises.bulkPut(exercises)
             localStorage.setItem(EXERCISES_LOADED_KEY, 'true')
-            console.log(`✅ Загружено ${exercises.length} упражнений`)
+            console.log(`✅ Загружено ${exercises.length} упражнений из файла`)
             return
         }
-    } catch (error) {
-            console.warn('⚠️ Используем встроенный список упражнений:', error)
+    } catch {
+            console.warn('⚠️ exercises.json не найден, используем встроенный список')
         }
         await db.exercises.bulkPut(FALLBACK_EXERCISES)
         console.log(`✅ Загружено ${FALLBACK_EXERCISES.length} базовых упражнений`)
