@@ -1,73 +1,76 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🏋️ Gym Tracker
 
-Currently, two official plugins are available:
+  <p>
+    <a href="https://aliveagain3228.github.io/gym-tracker/" target="_blank">
+      <img src="https://img.shields.io/badge/Live_Demo-Link-007ACC?style=for-the-badge&logo=githubpages&logoColor=white" alt="Live Demo" />
+    </a>
+  </p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+  <p>
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+    <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA" />
+    <img src="https://img.shields.io/badge/Dexie.js-FF6B35?style=for-the-badge&logo=indexeddb&logoColor=white" alt="Dexie" />
+  </p>
 
-## React Compiler
+</div>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📝 About the Project
 
-## Expanding the ESLint configuration
+A fully offline-capable Progressive Web App for tracking gym workouts. Built to practice building real-world PWAs with local-first data storage. Install it on your phone's home screen and use it without internet — all data stays on your device.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📸 App Preview
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+<img src="./public/preview.png" alt="Gym Tracker Interface" width="400"/>
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ✨ Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 📱 **PWA** — install on iOS/Android home screen, works fully offline
+- 🏋️ **Workout Tracking** — log exercises, sets, weight and reps in real time
+- ⏱ **Live Timer** — tracks workout duration automatically
+- 📊 **Progress Charts** — visualize weight progression and estimated 1RM per exercise
+- 📋 **Templates** — save workouts as reusable templates for quick start
+- 🎯 **Exercise Library** — 16+ exercises with muscle group filtering and technique guides
+- 🫀 **Muscle Diagrams** — SVG body illustrations showing targeted muscle groups
+- 💾 **IndexedDB Storage** — all data stored locally via Dexie.js, no backend required
+- 🔁 **1RM Calculator** — estimates one-rep max using Epley and Brzycki formulas
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React + TypeScript | UI and type safety |
+| Tailwind CSS v4 | Styling |
+| Vite | Build tool + dev server |
+| Dexie.js | IndexedDB wrapper for local storage |
+| Framer Motion | Animations and transitions |
+| Recharts | Progress charts |
+| Lucide React | Icons |
+| vite-plugin-pwa | Service Worker + PWA manifest |
+
+## 🚀 Installation
+
+```bash
+# Clone the project
+git clone https://github.com/aliveagain3228/gym-tracker.git
+
+# Install dependencies
+npm install
+
+# Run locally
+npm run dev
+
+# Build for production
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📱 Install as PWA
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Open the live demo in your mobile browser, tap **"Add to Home Screen"** — the app installs like a native app and works fully offline.
