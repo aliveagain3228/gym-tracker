@@ -107,14 +107,14 @@ export default function ExercisePicker({ onSelect }: ExercisesPickerProps) {
                             className="flex items-center gap-3 p-2 rounded-xl bg-slate-800 hover:bg-slate-750 transition-colors"
                         >
                             <div
-                                className={`w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden
+                                className={`w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden flex items-center justify-center
                                 bg-gradient-to-br ${PREVIEW_BG[exercise.muscleGroup]}
                                 border border-white/5
                                 `}
                             >
                                 <MuscleBodySvg
                                     muscleGroup={exercise.muscleGroup}
-                                    className="w-10 h-10"
+                                    className="h-10 w-auto"
                                     />
                             </div>
 
