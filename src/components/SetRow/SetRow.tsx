@@ -37,18 +37,18 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                 : 'bg-slate-800'
             }`}
         >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
 
-                <span className="text-slate-500 text-sm font-medium w-6 text-center flex-shrink-0">
+                <span className="text-slate-500 text-sm font-medium w-5 text-center flex-shrink-0">
                     {index}
                 </span>
 
-                <div className="flex-1">
-                    <p className="text-xs text-slate-500 mb-1 text-center">Вес (кг)</p>
-                    <div className="flex items-center gap-2 justify-center">
+                <div className="flex-1 flex flex-col gap-2">
+                    <span className="text-xs text-slate-500 flex-shrink-0 w-14">Вес (кг)</span>
+                    <div className="flex items-center gap-1.5 flex-1">
                         <button
                             onClick={() => handleWeightChange(-2.5)}
-                            className="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
                         >
                             −
                         </button>
@@ -60,11 +60,11 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                                 setWeight(val)
                                 onUpdate(val, reps)
                             }}
-                            className="w-16 text-center bg-slate-700 rounded-lg py-2 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                         <button
                             onClick={() => handleWeightChange(2.5)}
-                            className="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
                         >
                             +
                         </button>
@@ -73,12 +73,12 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
 
                 <div className="text-slate-600 font-bold">×</div>
 
-                <div className="flex-1">
-                    <p className="text-xs text-slate-500 mb-1 text-center">Повторений</p>
-                    <div className="flex items-center gap-2 justify-center">
+                <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500 flex-shrink-0 w-14">Повторений</span>
+                    <div className="flex items-center gap-1.5 flex-1">
                         <button
                             onClick={() => handleRepsChange(-1)}
-                            className="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
                         >
                             −
                         </button>
@@ -90,11 +90,11 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                                 setReps(val)
                                 onUpdate(weight,val)
                             }}
-                            className="w-16 text-center bg-slate-700 rounded-lg py-2 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                         <button
                         onClick={() => handleRepsChange(1)}
-                        className="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
+                        className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
                         >
                             +
                         </button>
