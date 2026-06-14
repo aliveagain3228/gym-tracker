@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState } from "react"
 import { motion } from 'framer-motion'
 import type { Set } from "../../types"
-import { calculate1RM } from "../../utils/calculations.ts";
+import { calculate1RM } from "../../utils/calculations.ts"
 
-interface  SetRowProps{
+interface SetRowProps {
     set: Set
     index: number
     onToggle: () => void
@@ -33,8 +33,8 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
             animate={{ opacity: 1, x: 0 }}
             className={`rounded-xl p-3 transition-colors ${
                 set.completed
-                ? "bg-green-500/10 border border-green-500/20"
-                : 'bg-slate-800'
+                    ? "bg-green-500/10 border border-green-500/20"
+                    : 'bg-slate-800'
             }`}
         >
             <div className="flex items-center gap-2">
@@ -43,69 +43,74 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                     {index}
                 </span>
 
-                <div className="flex-1 flex flex-col gap-2">
-                    <span className="text-xs text-slate-500 flex-shrink-0 w-14">Вес (кг)</span>
-                    <div className="flex items-center gap-1.5 flex-1">
-                        <button
-                            onClick={() => handleWeightChange(-2.5)}
-                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
-                        >
-                            −
-                        </button>
-                        <input
-                            type="number"
-                            value={weight}
-                            onChange={e => {
-                                const val = parseFloat(e.target.value) || 0
-                                setWeight(val)
-                                onUpdate(val, reps)
-                            }}
-                            className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <button
-                            onClick={() => handleWeightChange(2.5)}
-                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center"
-                        >
-                            +
-                        </button>
+                <div className="flex-1 flex flex-col gap-2 min-w-0">
+
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 flex-shrink-0 w-14">
+                            Вес (кг)
+                        </span>
+                        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                            <button
+                                onClick={() => handleWeightChange(-2.5)}
+                                className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
+                            >
+                                −
+                            </button>
+                            <input
+                                type="number"
+                                value={weight}
+                                onChange={e => {
+                                    const val = parseFloat(e.target.value) || 0
+                                    setWeight(val)
+                                    onUpdate(val, reps)
+                                }}
+                                className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <button
+                                onClick={() => handleWeightChange(2.5)}
+                                className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div className="text-slate-600 font-bold">×</div>
-
-                <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500 flex-shrink-0 w-14">Повторений</span>
-                    <div className="flex items-center gap-1.5 flex-1">
-                        <button
-                            onClick={() => handleRepsChange(-1)}
-                            className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
-                        >
-                            −
-                        </button>
-                        <input
-                            type="number"
-                            value={reps}
-                            onChange={e => {
-                                const val = parseInt(e.target.value) || 1
-                                setReps(val)
-                                onUpdate(weight,val)
-                            }}
-                            className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <button
-                        onClick={() => handleRepsChange(1)}
-                        className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
-                        >
-                            +
-                        </button>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 flex-shrink-0 w-14">
+                            Повт.
+                        </span>
+                        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                            <button
+                                onClick={() => handleRepsChange(-1)}
+                                className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
+                            >
+                                −
+                            </button>
+                            <input
+                                type="number"
+                                value={reps}
+                                onChange={e => {
+                                    const val = parseInt(e.target.value) || 1
+                                    setReps(val)
+                                    onUpdate(weight, val)
+                                }}
+                                className="flex-1 min-w-0 text-center bg-slate-700 rounded-lg py-1.5 text-white font-bold text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <button
+                                onClick={() => handleRepsChange(1)}
+                                className="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <button
                     onClick={onToggle}
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
                         set.completed
-                        ? 'bg-green-500 text-white'
+                            ? 'bg-green-500 text-white'
                             : 'bg-slate-700 text-slate-500 hover:bg-slate-600'
                     }`}
                 >
