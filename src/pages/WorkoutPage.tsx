@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useWorkouts } from "../hooks/useWorkouts.ts";
 import ExercisePicker from "../components/ExercisePicker/ExercisePicker.tsx";
 import SetRow from "../components/SetRow/SetRow.tsx";
 import { useTemplates } from "../hooks/useTemplates.ts";
+import { Trash2 } from 'lucide-react'
 
 export default function WorkoutPage() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
-    const { workouts, addExercise, addSet, toggleSet, updateSet, completeWorkout } = useWorkouts()
+    const { workouts, addExercise, deleteExercise, addSet, deleteSet, toggleSet, updateSet, completeWorkout } = useWorkouts()
     const [showPicker, setShowPicker] = useState(false)
 
     const { saveAsTemplate } = useTemplates()
@@ -22,15 +23,14 @@ export default function WorkoutPage() {
         intervalRef.current = setInterval(() => {
             setElapsed(prev => prev + 1)
         }, 1000)
-
         return () => {
-            if(intervalRef.current) clearInterval(intervalRef.current)
+            if (intervalRef.current) clearInterval(intervalRef.current)
         }
     }, [])
 
     const workout = workouts.find(w => w.id === id)
 
-    if(!workout) {
+    if (!workout) {
         return (
             <div className="flex items-center justify-center min-h-screen text-slate-400">
                 Тренировка не найдена
@@ -38,7 +38,7 @@ export default function WorkoutPage() {
         )
     }
 
-    const formatTime = (seconds: number) : string => {
+    const formatTime = (seconds: number): string => {
         const m = Math.floor(seconds / 60).toString().padStart(2, '0')
         const s = (seconds % 60).toString().padStart(2, '0')
         return `${m}:${s}`
@@ -58,8 +58,7 @@ export default function WorkoutPage() {
     const handleAddSet = async (exerciseId: string) => {
         const exercise = workout.exercises.find(e => e.id === exerciseId)
         const lastSet = exercise?.sets[exercise.sets.length - 1]
-
-        await addSet (
+        await addSet(
             workout.id,
             exerciseId,
             lastSet?.weight ?? 20,
@@ -87,7 +86,17 @@ export default function WorkoutPage() {
                 {workout.exercises.map(exercise => (
                     <div key={exercise.id} className="bg-slate-900 rounded-2xl p-4">
 
-                        <h2 className="font-semibold text-white mb-3">{exercise.exerciseName}</h2>
+                        <div className="flex items-center justify-between mb-3">
+                            <h2 className="font-semibold text-white truncate flex-1 min-w-0 mr-2">
+                                {exercise.exerciseName}
+                            </h2>
+                            <button
+                                onClick={() => deleteExercise(workout.id, exercise.id)}
+                                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 hover:text-red-400 hover:bg-red-400/10 active:scale-95 transition-all flex-shrink-0"
+                            >
+                                <Trash2 size={15} />
+                            </button>
+                        </div>
 
                         <div className="flex flex-col gap-2 mb-3">
                             <AnimatePresence>
@@ -98,6 +107,7 @@ export default function WorkoutPage() {
                                         index={index + 1}
                                         onToggle={() => toggleSet(workout.id, exercise.id, set.id)}
                                         onUpdate={(weight, reps) => updateSet(workout.id, exercise.id, set.id, weight, reps)}
+                                        onDelete={() => deleteSet(workout.id, exercise.id, set.id)}
                                     />
                                 ))}
                             </AnimatePresence>
@@ -123,7 +133,6 @@ export default function WorkoutPage() {
             {workout.exercises.length > 0 && !workout.completed && (
                 <div className="fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-sm">
                     <div className="max-w-2xl mx-auto flex gap-3">
-
                         <button
                             onClick={async () => {
                                 await saveAsTemplate(workout)
@@ -134,7 +143,6 @@ export default function WorkoutPage() {
                         >
                             {saved ? '✓ Сохранено' : '📋 Шаблон'}
                         </button>
-
                         <button
                             onClick={handleComplete}
                             className="flex-1 w-full py-4 rounded-2xl bg-green-600 hover:bg-green-500 active:scale-98 transition-all text-white font-bold text-base"

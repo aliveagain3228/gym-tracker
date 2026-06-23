@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { motion } from 'framer-motion'
+import { Trash2 } from 'lucide-react'
 import type { Set } from "../../types"
 import { calculate1RM } from "../../utils/calculations.ts"
 
@@ -8,9 +9,10 @@ interface SetRowProps {
     index: number
     onToggle: () => void
     onUpdate: (weight: number, reps: number) => void
+    onDelete: () => void
 }
 
-export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) {
+export default function SetRow({ set, index, onToggle, onUpdate, onDelete }: SetRowProps) {
     const [weight, setWeight] = useState(set.weight)
     const [reps, setReps] = useState(set.reps)
     const estimated1RM = weight > 0 && reps > 0 ? calculate1RM(weight, reps) : null
@@ -44,7 +46,6 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                 </span>
 
                 <div className="flex-1 flex flex-col gap-2 min-w-0">
-
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-slate-500 flex-shrink-0 w-14">
                             Вес (кг)
@@ -106,16 +107,24 @@ export default function SetRow({ set, index, onToggle, onUpdate }: SetRowProps) 
                     </div>
                 </div>
 
-                <button
-                    onClick={onToggle}
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
-                        set.completed
-                            ? 'bg-green-500 text-white'
-                            : 'bg-slate-700 text-slate-500 hover:bg-slate-600'
-                    }`}
-                >
-                    ✓
-                </button>
+                <div className="flex flex-col gap-1.5 flex-shrink-0">
+                    <button
+                        onClick={onToggle}
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all active:scale-95 ${
+                            set.completed
+                                ? 'bg-green-500 text-white'
+                                : 'bg-slate-700 text-slate-500 hover:bg-slate-600'
+                        }`}
+                    >
+                        ✓
+                    </button>
+                    <button
+                        onClick={onDelete}
+                        className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-700 hover:bg-red-500/20 text-slate-500 hover:text-red-400 active:scale-95 transition-all"
+                    >
+                        <Trash2 size={14} />
+                    </button>
+                </div>
             </div>
 
             {estimated1RM && set.completed && (

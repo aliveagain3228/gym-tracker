@@ -25,7 +25,7 @@ export default function HomePage() {
         navigate(`/workout/${workout.id}`)
     }
 
-    if(loading) {
+    if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen gap-3">
                 <Dumbbell className="text-indigo-500 animate-pulse" size={32} />
@@ -50,14 +50,12 @@ export default function HomePage() {
                         })}
                     </p>
                 </div>
-
-
-            <button
-                onClick={() => navigate('/history')}
-                className="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
-            >
-                <History size={18} className="text-slate-300" />
-            </button>
+                <button
+                    onClick={() => navigate('/history')}
+                    className="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                >
+                    <History size={18} className="text-slate-300" />
+                </button>
             </div>
 
             <motion.button
@@ -77,7 +75,7 @@ export default function HomePage() {
                         {templates.map(template => (
                             <div
                                 key={template.id}
-                                className="bg-slate-900 rounded-2xl p-4 flex items-center justify-between group"
+                                className="bg-slate-900 rounded-2xl p-4 flex items-center justify-between"
                             >
                                 <div className="min-w-0 flex-1">
                                     <p className="font-medium text-white text-sm">{template.name}</p>
@@ -97,16 +95,16 @@ export default function HomePage() {
                                             )
                                             navigate(`/workout/${workout.id}`)
                                         }}
-                                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition-colors"
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
                                     >
                                         <Play size={12} /> Старт
                                     </button>
 
                                     <button
                                         onClick={() => deleteTemplate(template.id)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-600 hover:text-red-400 p-1.5"
+                                        className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-red-400 hover:bg-red-400/10 active:text-red-400 rounded-lg transition-all"
                                     >
-                                        <Trash2 size={16} />
+                                        <Trash2 size={15} />
                                     </button>
                                 </div>
                             </div>
@@ -135,7 +133,7 @@ export default function HomePage() {
                             />
                             <button
                                 onClick={handleCreate}
-                                className="bg-indigo-600 hover:bg-slate-500 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors"
+                                className="bg-indigo-600 hover:bg-indigo-500 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors text-white"
                             >
                                 Создать
                             </button>
@@ -155,7 +153,6 @@ export default function HomePage() {
                     <h2 className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-3">
                         Сегодня
                     </h2>
-
                     <div className="flex flex-col gap-3">
                         {todayWorkouts.map((workout, index) => (
                             <motion.div
@@ -165,9 +162,9 @@ export default function HomePage() {
                                 transition={{ delay: index * 0.05 }}
                             >
                                 <WorkoutCard
-                                workout={workout}
-                                onOpen={() => navigate(`/workout/${workout.id}`)}
-                                onDelete={() => deleteWorkout(workout.id)}
+                                    workout={workout}
+                                    onOpen={() => navigate(`/workout/${workout.id}`)}
+                                    onDelete={() => deleteWorkout(workout.id)}
                                 />
                             </motion.div>
                         ))}
@@ -183,15 +180,15 @@ export default function HomePage() {
                     <div className="flex flex-col gap-3">
                         {pastWorkouts.map((workout, index) => (
                             <motion.div
-                            key={workout.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
+                                key={workout.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.05 }}
                             >
                                 <WorkoutCard
-                                workout={workout}
-                                onOpen={() => navigate(`/workout/${workout.id}`)}
-                                onDelete={() => deleteWorkout(workout.id)}
+                                    workout={workout}
+                                    onOpen={() => navigate(`/workout/${workout.id}`)}
+                                    onDelete={() => deleteWorkout(workout.id)}
                                 />
                             </motion.div>
                         ))}
@@ -207,6 +204,5 @@ export default function HomePage() {
                 </div>
             )}
         </div>
-
     )
 }

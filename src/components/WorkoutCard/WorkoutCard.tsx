@@ -1,5 +1,6 @@
 import type { Workout } from '../../types'
 import { calculateVolume } from '../../utils/calculations'
+import { Trash2 } from 'lucide-react'
 
 interface WorkoutCardProps {
     workout: Workout
@@ -19,12 +20,11 @@ export default function WorkoutCard({ workout, onOpen, onDelete }: WorkoutCardPr
     return (
         <div
             onClick={onOpen}
-            className="bg-slate-900 rounded-2xl p-4 cursor-pointer hover:bg-slate-800 transition-colors group"
+            className="bg-slate-900 rounded-2xl p-4 cursor-pointer hover:bg-slate-800 transition-colors"
         >
             <div className="flex items-start justify-between">
 
                 <div className="flex-1 min-w-0">
-
                     <div className="flex items-center gap-2 mb-1">
                         {workout.completed && (
                             <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
@@ -33,9 +33,7 @@ export default function WorkoutCard({ workout, onOpen, onDelete }: WorkoutCardPr
                         )}
                         <span className="text-xs text-slate-500">{displayDate}</span>
                     </div>
-
                     <h3 className="font-semibold text-white truncate">{workout.name}</h3>
-
                     {workout.exercises.length > 0 && (
                         <p className="text-slate-500 text-xs mt-1 truncate">
                             {workout.exercises.map(e => e.exerciseName).join(' · ')}
@@ -45,9 +43,9 @@ export default function WorkoutCard({ workout, onOpen, onDelete }: WorkoutCardPr
 
                 <button
                     onClick={e => { e.stopPropagation(); onDelete() }}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-600 hover:text-red-400 p-1 ml-2 flex-shrink-0"
+                    className="text-slate-500 hover:text-red-400 active:text-red-400 p-1.5 ml-2 flex-shrink-0 hover:bg-red-400/10 rounded-lg transition-all"
                 >
-                    ✕
+                    <Trash2 size={15} />
                 </button>
             </div>
 

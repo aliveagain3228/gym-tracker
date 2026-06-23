@@ -10,12 +10,10 @@ export function useWorkouts() {
     useEffect(() => {
         void (async () => {
             await seedExerciseIfEmpty()
-
-        const all = await db.workouts
+            const all = await db.workouts
                 .orderBy('date')
                 .reverse()
                 .toArray()
-
             setWorkouts(all)
             setLoading(false)
         })()
@@ -29,11 +27,8 @@ export function useWorkouts() {
             exercises: [],
             completed: false,
         }
-
         await db.workouts.add(workout)
-
         setWorkouts(prev => [workout, ...prev])
-
         return workout
     }
 
@@ -44,17 +39,29 @@ export function useWorkouts() {
             exerciseName,
             sets: [],
         }
-
         await db.workouts
             .where('id').equals(workoutId)
             .modify(workout => {
                 workout.exercises.push(newExercise)
             })
-
         setWorkouts(prev => prev.map(w =>
             w.id === workoutId
-                ? {...w, exercises: [...w.exercises, newExercise]}
+                ? { ...w, exercises: [...w.exercises, newExercise] }
                 : w
+        ))
+    }
+
+    const deleteExercise = async (workoutId: string, exerciseId: string) => {
+        await db.workouts
+            .where('id').equals(workoutId)
+            .modify(workout => {
+                workout.exercises = workout.exercises.filter(e => e.id !== exerciseId)
+            })
+        setWorkouts(prev => prev.map(w =>
+            w.id !== workoutId ? w : {
+                ...w,
+                exercises: w.exercises.filter(e => e.id !== exerciseId)
+            }
         ))
     }
 
@@ -71,14 +78,32 @@ export function useWorkouts() {
                 const exercise = workout.exercises.find(e => e.id === exerciseId)
                 if (exercise) exercise.sets.push(newSet)
             })
-
         setWorkouts(prev => prev.map(w => {
             if (w.id !== workoutId) return w
             return {
                 ...w,
                 exercises: w.exercises.map(e => {
                     if (e.id !== exerciseId) return e
-                    return {...e, sets: [...e.sets, newSet]}
+                    return { ...e, sets: [...e.sets, newSet] }
+                })
+            }
+        }))
+    }
+
+    const deleteSet = async (workoutId: string, exerciseId: string, setId: string) => {
+        await db.workouts
+            .where('id').equals(workoutId)
+            .modify(workout => {
+                const exercise = workout.exercises.find(e => e.id === exerciseId)
+                if (exercise) exercise.sets = exercise.sets.filter(s => s.id !== setId)
+            })
+        setWorkouts(prev => prev.map(w => {
+            if (w.id !== workoutId) return w
+            return {
+                ...w,
+                exercises: w.exercises.map(e => {
+                    if (e.id !== exerciseId) return e
+                    return { ...e, sets: e.sets.filter(s => s.id !== setId) }
                 })
             }
         }))
@@ -101,7 +126,7 @@ export function useWorkouts() {
                     return {
                         ...e,
                         sets: e.sets.map(s =>
-                            s.id === setId ? {...s, completed: !s.completed} : s
+                            s.id === setId ? { ...s, completed: !s.completed } : s
                         )
                     }
                 })
@@ -120,7 +145,6 @@ export function useWorkouts() {
                     set.reps = reps
                 }
             })
-
         setWorkouts(prev => prev.map(w => {
             if (w.id !== workoutId) return w
             return {
@@ -130,7 +154,7 @@ export function useWorkouts() {
                     return {
                         ...e,
                         sets: e.sets.map(s =>
-                            s.id === setId ? {...s, weight, reps} : s
+                            s.id === setId ? { ...s, weight, reps } : s
                         )
                     }
                 })
@@ -145,9 +169,8 @@ export function useWorkouts() {
                 w.completed = true
                 w.duration = duration
             })
-
         setWorkouts(prev => prev.map(w =>
-            w.id === workoutId ? {...w, completed: true, duration} : w
+            w.id === workoutId ? { ...w, completed: true, duration } : w
         ))
     }
 
@@ -161,7 +184,9 @@ export function useWorkouts() {
         loading,
         createWorkout,
         addExercise,
+        deleteExercise,
         addSet,
+        deleteSet,
         toggleSet,
         updateSet,
         completeWorkout,
