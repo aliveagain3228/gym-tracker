@@ -1,36 +1,7 @@
 import { db } from "./index.ts";
-import type { Exercise } from "../types";
 import { fetchExercisesFromAPI } from "./exerciseDbService.ts";
 
-const EXERCISES_LOADED_KEY = 'gym_tracker_api_loaded_v5'
-
-const FALLBACK_EXERCISES: Exercise[] = [
-
-    { id: 'bench-press',        name: 'Жим штанги лёжа',              muscleGroup: 'chest',     equipment: 'barbell',    description: '4 × 6–8. Базовое упражнение для груди. Опускай штангу к середине груди, локти 45°.' },
-    { id: 'incline-db-press',   name: 'Жим гантелей на наклонной',    muscleGroup: 'chest',     equipment: 'dumbbell',   description: '3 × 10–12. Верх грудных. Наклон скамьи 30–45°.' },
-    { id: 'pullover-db',        name: 'Пуловер с гантелью',           muscleGroup: 'chest',     equipment: 'dumbbell',   description: '3 × 12–15. Выполняйте лежа поперек скамьи, делайте глубокий вдох на опускании.' },
-    { id: 'ohp',                name: 'Жим штанги с груди стоя',      muscleGroup: 'shoulders', equipment: 'barbell',    description: '3 × 8–10. База для дельт. Выжимай строго вверх, не отклоняйся.' },
-    { id: 'lateral-raise',      name: 'Махи гантелями в стороны',     muscleGroup: 'shoulders', equipment: 'dumbbell',   description: '3 × 12–15. Средние дельты. Поднимай до уровня плеч.' },
-    { id: 'hanging-leg-raise',  name: 'Подъём ног в висе (или лежа)', muscleGroup: 'core',      equipment: 'bodyweight', description: '3 × 15–20. Нижний пресс. Поднимай ноги до 90° без раскачки.' },
-    { id: 'crunch',             name: 'Скручивания на пресс',         muscleGroup: 'core',      equipment: 'bodyweight', description: '3 × 20. Верхний пресс. Отрывай только лопатки.' },
-
-    { id: 'barbell-row',        name: 'Тяга штанги в наклоне',        muscleGroup: 'back',      equipment: 'barbell',    description: '4 × 8–10. Толщина спины. Тяни к низу живота, наклон 45°.' },
-    { id: 'db-row',             name: 'Тяга гантели к поясу',         muscleGroup: 'back',      equipment: 'dumbbell',   description: '3 × 10–12. Широчайшие. Опирайся коленом на скамью.' },
-    { id: 'barbell-curl',       name: 'Подъём штанги на бицепс',      muscleGroup: 'biceps',    equipment: 'barbell',    description: '3 × 10–12. Масса бицепса. Хват прямой средний. Локти прижаты.' },
-    { id: 'french-press',       name: 'Французский жим',              muscleGroup: 'triceps',   equipment: 'barbell',    description: '3 × 10–12. Длинная головка трицепса. Локти неподвижны.' },
-    { id: 'reverse-curl',       name: 'Подъём штанги ОБРАТНЫМ хватом',muscleGroup: 'biceps',    equipment: 'barbell',    description: '3 × 12. Развивает плечелучевую мышцу и предплечья.' },
-    { id: 'cable-pushdown',     name: 'Разгибание рук в станке стоя', muscleGroup: 'triceps',   equipment: 'machine',    description: 'Изоляция трицепса. Локти прижаты, разгибай полностью.' },
-    { id: 'plank',              name: 'Планка',                       muscleGroup: 'core',      equipment: 'bodyweight', description: '3 подхода по 1 минуте. Статика для кора. Тело ровное, не прогибайся.' },
-
-    { id: 'squat',              name: 'Приседания со штангой',        muscleGroup: 'legs',      equipment: 'barbell',    description: '4 × 8–10. Король упражнений. До параллели, спина прямая.' },
-    { id: 'leg-curl',           name: 'Сгибание ног в станке',        muscleGroup: 'legs',      equipment: 'machine',    description: '3 × 12–15. Бицепс бедра. Не отрывай таз от скамьи.' },
-    { id: 'leg-extension',      name: 'Разгибание ног в станке',      muscleGroup: 'legs',      equipment: 'machine',    description: '3 × 12–15. Квадрицепс. Разгибай полностью.' },
-    { id: 'deadlift',           name: 'Становая тяга со штангой',     muscleGroup: 'back',      equipment: 'barbell',    description: '3 × 10–12. Спина прямая, штангу веди вдоль голеней.' },
-    { id: 'wrist-curl-seated',  name: 'Сгибание кистей со штангой',   muscleGroup: 'biceps',    equipment: 'barbell',    description: '3 × 15–20. Выполняется сидя. Развитие внутренней части предплечий.' },
-    { id: 'wrist-ext-db',       name: 'Разгибание кистей с гантелями',muscleGroup: 'biceps',    equipment: 'dumbbell',   description: '3 × 15–20. Развитие внешней (тыльной) части предплечий.' },
-    { id: 'sit-up',             name: 'Подъём корпуса лёжа',          muscleGroup: 'core',      equipment: 'bodyweight', description: '3 × 15. Руки на затылок. Полное скручивание к коленям.' },
-    { id: 'oblique-crunch',     name: 'Боковые скручивания',          muscleGroup: 'core',      equipment: 'bodyweight', description: '3 × 20 на каждую сторону. Акцент на косые мышцы живота.' }
-]
+const EXERCISES_LOADED_KEY = 'gym_tracker_api_loaded_v9'
 
 async function seedTemplates(): Promise<void> {
     const templateCount = await db.templates.count()
@@ -90,7 +61,7 @@ export async function seedExerciseIfEmpty(): Promise<void> {
     const count = await db.exercises.count()
 
     if (count > 0) {
-        console.log('🔄 Обновляю базу данных до версии v5...')
+        console.log('🔄 Очищаю старую базу перед заполнением новой версии...')
         await db.exercises.clear()
     }
 
@@ -99,28 +70,19 @@ export async function seedExerciseIfEmpty(): Promise<void> {
 
         if (exercises.length > 0) {
             await db.exercises.bulkPut(exercises)
-            await db.exercises.bulkPut(FALLBACK_EXERCISES)
-
             await seedTemplates()
 
             localStorage.setItem(EXERCISES_LOADED_KEY, 'true')
-            console.log(`✅ Загружено ${exercises.length} упражнений и шаблоны обновлены`)
+            console.log(`✅ База Dexie успешно заполнена (${exercises.length} упражнений)`)
             return
         }
-    } catch {
-        console.warn('⚠️ exercises.json не найден, используем встроенный список')
+    } catch (error) {
+        console.warn('❌ Ошибка при первичном заполнении базы:', error)
     }
-
-    await db.exercises.bulkPut(FALLBACK_EXERCISES)
-    await seedTemplates()
-
-    localStorage.setItem(EXERCISES_LOADED_KEY, 'true')
-    console.log(`✅ Загружены базовые упражнения и созданы шаблоны программ`)
 }
-
-export async function refreshExercisesFromAPI(): Promise<void> {
-    localStorage.removeItem(EXERCISES_LOADED_KEY)
-    await db.exercises.clear()
-    await db.templates.clear()
-    await seedExerciseIfEmpty()
-}
+    export async function refreshExercisesFromAPI(): Promise<void> {
+        localStorage.removeItem(EXERCISES_LOADED_KEY)
+        await db.exercises.clear()
+        await db.templates.clear()
+        await seedExerciseIfEmpty()
+    }

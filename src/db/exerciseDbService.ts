@@ -1,19 +1,28 @@
 import type { Exercise } from "../types";
 
 export async function fetchExercisesFromAPI(): Promise<Exercise[]> {
-    console.log('📂 Загружаю упражнения из локального файла...')
+    console.log('\'🌐 Скачиваю готовую базу упражнений из интернета...')
 
-    const url = `${import.meta.env.BASE_URL}exercises.json`
-
-    const response = await fetch(url)
-
-    if(!response.ok) {
-        throw new Error(
-            `exercises.json не найден (${response.status}). ` +
-            `Запусти: node scripts/fetchExercises.mjs`
-        )
+try {
+    const response = await fetch(
+        'https://raw.githubusercontent.com/aliveagain3228/exercisesAPI/refs/heads/main/exercises.json'
+    )
+    if (!response.ok) {
+        throw new Error(`Ошибка сервера: ${response.status}`)
     }
+
+
     const exercises: Exercise[] = await response.json()
-    console.log(`✅ Загружено ${exercises.length} упражнений из файла`)
+
+    console.log(`✅ Успешно загружено ${exercises.length} упражнений из cвоей базы!`)
     return exercises
+} catch (error) {
+    console.error('❌ Не удалось скачать API:', error)
+    return []
 }
+}
+
+
+
+
+
