@@ -12,7 +12,7 @@ const pageVariants = {
 
 const pageTransition = {
     duration: 0.22,
-    ease: 'easeOut'
+    ease: 'easeOut' as const
 }
 
 function AnimatedRoutes() {
